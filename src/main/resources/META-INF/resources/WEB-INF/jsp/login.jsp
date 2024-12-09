@@ -7,6 +7,7 @@
 </head>
 
 <body>
+    Welcome to login page ${name}
     <form action="" method="POST">
         <input type="text" name="username" placeholder="username">
         <input type="password" name="password" placeholder="password">
