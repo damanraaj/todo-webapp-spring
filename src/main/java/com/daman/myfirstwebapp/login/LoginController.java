@@ -26,6 +26,7 @@ public class LoginController {
 	@PostMapping("login")
 	public String goToWelcome(@RequestParam String username, @RequestParam String password, ModelMap map) {
 		map.put("name", username);
+		logger.debug("User {} attempted to login", username);
 		if (authService.authenticate(username, password)) {
 
 			return "welcome";
