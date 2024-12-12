@@ -1,12 +1,12 @@
 <html>
 
 <head>
-<title>Welcome</title>
+	<title>Welcome</title>
 </head>
 
 <body>
-	Welcome ${name}!
-	<div>
+	<div class="container">
+		<h1>Welcome ${name}!</h1>
 		<a href="list-todos">List Todos</a>
 		<a href="login">Logout</a>
 	</div>

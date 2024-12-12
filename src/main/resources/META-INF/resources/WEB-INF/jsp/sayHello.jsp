@@ -1,7 +1,10 @@
 <html>
 
 <body>
-    <h1>Hello World in html using jsp</h1>
+    <div class="container">
+        <h1>Welcome</h1>
+        <a href="login">Login</a>
+    </div>
 </body>
 
 </html>
