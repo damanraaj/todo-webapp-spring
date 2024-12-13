@@ -10,7 +10,7 @@
 	<div class="container">
 		<h1>Welcome ${name}!</h1>
 		<a href="list-todos">List Todos</a>
-		<a href="login">Logout</a>
+		<a href="logout">Logout</a>
 	</div>
 </body>
 

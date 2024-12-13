@@ -10,7 +10,7 @@
 	<body>
 		<div class="container">
 			<div>
-				Welcome ${name} <a href="login"> Logout</a>
+				Welcome ${name} <a href="logout"> Logout</a>
 			</div>
 			<hr>
 			<h1>Your Todos are:</h1>

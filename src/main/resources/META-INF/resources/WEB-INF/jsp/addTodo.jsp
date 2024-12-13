@@ -12,11 +12,11 @@
         <div>
             Welcome ${name} 
             <a href="list-todos">Your Todos</a>
-            <a href="login"> Logout</a>
+            <a href="logout"> Logout</a>
         </div>
         <hr>
         <h1>Add a Todo</h1>
-        <form action="" method="POST">
+        <form method="POST">
             <input type="text" name="description" placeholder="description" required>
             <input type="date" name="targetDate" placeholder="targetDate">
             <input type="submit" value="Add Todo" class="btn btn-success">
