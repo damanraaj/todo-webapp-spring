@@ -43,17 +43,18 @@ public class TodoController {
 		if (!isUserLoggedIn(map)) {
 			return "redirect:/login";
 		}
+		Todo newTodo = new Todo(0, map.get("name").toString(), "", false, LocalDate.now());
+		map.put("todo", newTodo);
 		return "addTodo";
 	}
 
 	@PostMapping("add-todo")
-	public String handleAddTodo(@RequestParam String description, @RequestParam Optional<LocalDate> targetDate,
-			ModelMap map) {
+	public String handleAddTodo(Todo todo, ModelMap map) {
 		if (!isUserLoggedIn(map)) {
 			return "redirect:/login";
 		}
 
-		todoService.addTodo(map.get("name").toString(), description, targetDate.orElse(null));
+		todoService.addTodo(map.get("name").toString(), todo.getDescription(), todo.getTargetDate());
 		return "redirect:/list-todos";
 	}
 
