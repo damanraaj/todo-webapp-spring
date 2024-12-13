@@ -23,7 +23,7 @@ public class TodoController {
 
 	@GetMapping("list-todos")
 	public String getTodoList(ModelMap map) {
-		if (!checkUserLoggedIn(map)) {
+		if (!isUserLoggedIn(map)) {
 			return "redirect:/login";
 		}
 		logger.debug("User {} opened list todos", map.get("name"));
@@ -31,9 +31,8 @@ public class TodoController {
 		return "listTodos";
 	}
 
-	private boolean checkUserLoggedIn(ModelMap map) {
+	private boolean isUserLoggedIn(ModelMap map) {
 		if (!map.containsAttribute("name")) {
-			logger.debug("user not logged in");
 			return false;
 		}
 		return true;
@@ -41,7 +40,7 @@ public class TodoController {
 
 	@GetMapping("add-todo")
 	public String goToAddTodoPage(ModelMap map) {
-		if (!checkUserLoggedIn(map)) {
+		if (!isUserLoggedIn(map)) {
 			return "redirect:/login";
 		}
 		return "addTodo";
@@ -50,12 +49,12 @@ public class TodoController {
 	@PostMapping("add-todo")
 	public String handleAddTodo(@RequestParam String description, @RequestParam Optional<LocalDate> targetDate,
 			ModelMap map) {
-		if (!checkUserLoggedIn(map)) {
+		if (!isUserLoggedIn(map)) {
 			return "redirect:/login";
 		}
 
 		todoService.addTodo(map.get("name").toString(), description, targetDate.orElse(null));
-		return getTodoList(map);
+		return "redirect:/list-todos";
 	}
 
 }
