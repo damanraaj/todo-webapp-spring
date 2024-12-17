@@ -1,17 +1,19 @@
 package com.daman.myfirstwebapp.todo;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @SessionAttributes("name")
@@ -49,9 +51,13 @@ public class TodoController {
 	}
 
 	@PostMapping("add-todo")
-	public String handleAddTodo(Todo todo, ModelMap map) {
+	public String handleAddTodo(ModelMap map, @Valid Todo todo, BindingResult result) {
 		if (!isUserLoggedIn(map)) {
 			return "redirect:/login";
+		}
+
+		if (result.hasErrors()) {
+			return "addTodo";
 		}
 
 		todoService.addTodo(map.get("name").toString(), todo.getDescription(), todo.getTargetDate());

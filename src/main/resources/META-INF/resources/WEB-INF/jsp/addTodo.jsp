@@ -20,6 +20,7 @@
 		<form:form method="post" modelAttribute="todo">
 			<form:input type="text" path="description" placeholder="description"
 				required="required" />
+			<form:errors path="description" cssClass="text-warning" />
 			<form:input type="date" path="targetDate" />
 			<form:input type="hidden" path="done" />
 			<form:input type="hidden" path="id" />
