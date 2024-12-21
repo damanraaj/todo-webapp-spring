@@ -4,7 +4,7 @@
 
 <head>
 <meta charset="UTF-8">
-<title>Add Todo</title>
+<title>Update Todo</title>
 
 <link href="webjars/bootstrap/5.1.3/css/bootstrap.min.css"
 	rel="stylesheet">
@@ -14,13 +14,9 @@
 </head>
 
 <body>
+	<%@ include file="common/navigation.jspf"%>
 	<div class="container">
-		<div>
-			Welcome ${name} <a href="list-todos">Your Todos</a> <a href="logout">
-				Logout</a>
-		</div>
-		<hr>
-		<h1>Update Todo</h1>
+
 		<form:form method="post" modelAttribute="todo">
 
 			<fieldset class="mb-3">

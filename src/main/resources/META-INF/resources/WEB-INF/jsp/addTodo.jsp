@@ -10,12 +10,10 @@
 </head>
 
 <body>
+	<%@ include file="common/navigation.jspf" %>
+
 	<div class="container">
-		<div>
-			Welcome ${name} <a href="list-todos">Your Todos</a> <a href="logout">
-				Logout</a>
-		</div>
-		<hr>
+		
 		<h1>Add a Todo</h1>
 		<form:form method="post" modelAttribute="todo">
 			<form:input type="text" path="description" placeholder="description"

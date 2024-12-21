@@ -9,12 +9,8 @@
 </head>
 
 <body>
+	<%@ include file="common/navigation.jspf" %>
 	<div class="container">
-		<div>
-			Welcome ${name} <a href="logout"> Logout</a>
-			<hr>
-			<h1>Your Todos are:</h1>
-		</div>
 		<table class="table">
 			<thead>
 				<tr>
