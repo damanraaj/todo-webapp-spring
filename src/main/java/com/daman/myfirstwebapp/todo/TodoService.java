@@ -17,8 +17,8 @@ public class TodoService {
 		todos.add(new Todo(3, "admin", "Learn Angular", false, LocalDate.now().plusMonths(3)));
 		todos.add(new Todo(4, "admin", "Learn React", false, LocalDate.now().plusMonths(4)));
 	}
-	
-	public List<Todo> findByUserName(String name){
+
+	public List<Todo> findByUserName(String name) {
 		return todos.stream().filter(todo -> todo.getUsername().equals(name)).collect(Collectors.toList());
 	}
 
@@ -33,9 +33,10 @@ public class TodoService {
 	public Todo findById(long id) {
 		return todos.stream().filter(todo -> todo.getId() == id).findFirst().get();
 	}
-	
+
 	public void updateTodo(Todo newTodo) {
-		todos.removeIf(todo -> todo.getId() == newTodo.getId());
-		todos.add(newTodo);
+		findById(newTodo.getId()).setDescription(newTodo.getDescription());
+		findById(newTodo.getId()).setTargetDate(newTodo.getTargetDate());
+
 	}
 }
