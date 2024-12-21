@@ -9,11 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import jakarta.validation.Valid;
-
-import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @SessionAttributes("name")
@@ -63,5 +63,38 @@ public class TodoController {
 		todoService.addTodo(map.get("name").toString(), todo.getDescription(), todo.getTargetDate());
 		return "redirect:/list-todos";
 	}
-
+	
+	@GetMapping("delete-todo")
+	public String handleDeleteTodo(ModelMap map, @RequestParam long id) {
+		if (!isUserLoggedIn(map)) {
+			return "redirect:/login";
+		}
+		todoService.deleteTodoById(id);
+		return "redirect:/list-todos";
+	}
+	
+	@GetMapping("update-todo")
+	public String goToUpdateTodoPage(ModelMap map, @RequestParam long id) {
+		if (!isUserLoggedIn(map)) {
+			return "redirect:/login";
+		}
+		Todo todo = todoService.findById(id);
+		logger.debug("Open update todo page for {}",todo.toString());
+		map.put("todo", todo);
+		return "updateTodo";
+	}
+	
+	@PostMapping("update-todo")
+	public String handleUpdateTodo(ModelMap map, @Valid Todo todo, BindingResult result) {
+		if (!isUserLoggedIn(map)) {
+			return "redirect:/login";
+		}
+		if (result.hasErrors()) {
+			return "updateTodo";
+		}
+		todo.setUsername(map.get("name").toString());	
+		todoService.updateTodo(todo);
+		logger.debug("Updated todo {}",todo.toString());
+		return "redirect:/list-todos";
+	}
 }

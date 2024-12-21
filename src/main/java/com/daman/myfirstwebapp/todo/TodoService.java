@@ -25,4 +25,17 @@ public class TodoService {
 	public void addTodo(String username, String description, LocalDate targetDate) {
 		todos.add(new Todo(todos.size() + 1, username, description, false, targetDate));
 	}
+
+	public void deleteTodoById(long id) {
+		todos.removeIf(todo -> todo.getId() == id);
+	}
+
+	public Todo findById(long id) {
+		return todos.stream().filter(todo -> todo.getId() == id).findFirst().get();
+	}
+	
+	public void updateTodo(Todo newTodo) {
+		todos.removeIf(todo -> todo.getId() == newTodo.getId());
+		todos.add(newTodo);
+	}
 }
