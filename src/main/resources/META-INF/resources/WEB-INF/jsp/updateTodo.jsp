@@ -34,15 +34,16 @@
 			<form:input type="hidden" path="id" />
 			<input type="submit" value="Update Todo" class="btn btn-success" />
 
-			<script src="webjars/jquery/3.6.0/jquery.min.js"></script>
-			<script
-				src="webjars/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-			<script type="text/javascript">
-				$('#targetDate').datepicker({
-					format : 'yyyy-mm-dd'
-				});
-			</script>
 		</form:form>
+
+		<script src="webjars/jquery/3.6.0/jquery.min.js"></script>
+		<script
+			src="webjars/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+		<script type="text/javascript">
+			$('#targetDate').datepicker({
+				format : 'yyyy-mm-dd'
+			});
+		</script>
 	</div>
 </body>
 
