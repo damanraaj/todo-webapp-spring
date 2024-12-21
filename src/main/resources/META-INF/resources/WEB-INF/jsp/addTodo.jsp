@@ -10,10 +10,10 @@
 </head>
 
 <body>
-	<%@ include file="common/navigation.jspf" %>
+	<%@ include file="common/navigation.jspf"%>
 
 	<div class="container">
-		
+
 		<h1>Add a Todo</h1>
 		<form:form method="post" modelAttribute="todo">
 			<form:input type="text" path="description" placeholder="description"

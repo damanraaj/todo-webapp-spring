@@ -9,7 +9,7 @@
 </head>
 
 <body>
-	<%@ include file="common/navigation.jspf" %>
+	<%@ include file="common/navigation.jspf"%>
 	<div class="container">
 		<table class="table">
 			<thead>
