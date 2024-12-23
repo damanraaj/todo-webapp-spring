@@ -9,12 +9,10 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @SessionAttributes("name")
 public class WelcomeController {
 
-	@GetMapping
+	@GetMapping("/")
 	public String sayHelloJSP(ModelMap map) {
-		if(map.containsAttribute("name")) {
-			return "welcome";
-		}
-		return "redirect:/login";
+		map.addAttribute("name", "admin");
+		return "welcome";
 	}
 
 }

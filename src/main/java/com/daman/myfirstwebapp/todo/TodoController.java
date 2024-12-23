@@ -25,26 +25,13 @@ public class TodoController {
 
 	@GetMapping("list-todos")
 	public String getTodoList(ModelMap map) {
-		if (!isUserLoggedIn(map)) {
-			return "redirect:/login";
-		}
 		logger.debug("User {} opened list todos", map.get("name"));
 		map.put("todo", todoService.findByUserName(map.get("name").toString()));
 		return "listTodos";
 	}
 
-	private boolean isUserLoggedIn(ModelMap map) {
-		if (!map.containsAttribute("name")) {
-			return false;
-		}
-		return true;
-	}
-
 	@GetMapping("add-todo")
 	public String goToAddTodoPage(ModelMap map) {
-		if (!isUserLoggedIn(map)) {
-			return "redirect:/login";
-		}
 		Todo newTodo = new Todo(0, map.get("name").toString(), "", false, LocalDate.now());
 		map.put("todo", newTodo);
 		return "addTodo";
@@ -52,10 +39,6 @@ public class TodoController {
 
 	@PostMapping("add-todo")
 	public String handleAddTodo(ModelMap map, @Valid Todo todo, BindingResult result) {
-		if (!isUserLoggedIn(map)) {
-			return "redirect:/login";
-		}
-
 		if (result.hasErrors()) {
 			return "addTodo";
 		}
@@ -66,18 +49,12 @@ public class TodoController {
 
 	@GetMapping("delete-todo")
 	public String handleDeleteTodo(ModelMap map, @RequestParam long id) {
-		if (!isUserLoggedIn(map)) {
-			return "redirect:/login";
-		}
 		todoService.deleteTodoById(id);
 		return "redirect:/list-todos";
 	}
 
 	@GetMapping("update-todo")
 	public String goToUpdateTodoPage(ModelMap map, @RequestParam long id) {
-		if (!isUserLoggedIn(map)) {
-			return "redirect:/login";
-		}
 		Todo todo = todoService.findById(id);
 		logger.debug("Open update todo page for {}", todo.toString());
 		map.put("todo", todo);
@@ -86,9 +63,6 @@ public class TodoController {
 
 	@PostMapping("update-todo")
 	public String handleUpdateTodo(ModelMap map, Todo todo, BindingResult result) {
-		if (!isUserLoggedIn(map)) {
-			return "redirect:/login";
-		}
 		if (result.hasErrors()) {
 			return "updateTodo";
 		}
