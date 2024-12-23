@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -25,14 +27,15 @@ public class TodoController {
 
 	@GetMapping("list-todos")
 	public String getTodoList(ModelMap map) {
-		logger.debug("User {} opened list todos", map.get("name"));
-		map.put("todo", todoService.findByUserName(map.get("name").toString()));
+		String loggedInUser = getLoggedInUser(map);
+		logger.debug("User {} opened list todos", loggedInUser);
+		map.put("todo", todoService.findByUserName(loggedInUser));
 		return "listTodos";
 	}
 
 	@GetMapping("add-todo")
 	public String goToAddTodoPage(ModelMap map) {
-		Todo newTodo = new Todo(0, map.get("name").toString(), "", false, LocalDate.now());
+		Todo newTodo = new Todo(0, getLoggedInUser(map), "", false, LocalDate.now());
 		map.put("todo", newTodo);
 		return "addTodo";
 	}
@@ -43,7 +46,7 @@ public class TodoController {
 			return "addTodo";
 		}
 
-		todoService.addTodo(map.get("name").toString(), todo.getDescription(), todo.getTargetDate());
+		todoService.addTodo(getLoggedInUser(map), todo.getDescription(), todo.getTargetDate());
 		return "redirect:/list-todos";
 	}
 
@@ -66,9 +69,14 @@ public class TodoController {
 		if (result.hasErrors()) {
 			return "updateTodo";
 		}
-		todo.setUsername(map.get("name").toString());
+		todo.setUsername(getLoggedInUser(map));
 		todoService.updateTodo(todo);
 		logger.debug("Updated todo {}", todo.toString());
 		return "redirect:/list-todos";
+	}
+
+	private String getLoggedInUser(ModelMap map) {
+		SecurityContext context = SecurityContextHolder.getContext();
+		return context.getAuthentication().getName();
 	}
 }
