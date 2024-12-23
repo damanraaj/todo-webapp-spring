@@ -17,13 +17,14 @@ public class TodoService {
 		todos.add(new Todo(3, "admin", "Learn Angular", false, LocalDate.now().plusMonths(3)));
 		todos.add(new Todo(4, "admin", "Learn React", false, LocalDate.now().plusMonths(4)));
 	}
+	static int todoCount = todos.size();
 
 	public List<Todo> findByUserName(String name) {
 		return todos.stream().filter(todo -> todo.getUsername().equals(name)).collect(Collectors.toList());
 	}
 
 	public void addTodo(String username, String description, LocalDate targetDate) {
-		todos.add(new Todo(todos.size() + 1, username, description, false, targetDate));
+		todos.add(new Todo(++todoCount, username, description, false, targetDate));
 	}
 
 	public void deleteTodoById(long id) {
