@@ -1,6 +1,5 @@
 package com.daman.myfirstwebapp.security;
 
-
 import java.util.function.Function;
 
 import org.springframework.context.annotation.Bean;
@@ -17,10 +16,16 @@ public class SpringSecurityConfiguration {
 	@Bean
 	InMemoryUserDetailsManager userDetailsManager() {
 		Function<String, String> passwordEncoder = input -> passwordEncoder().encode(input);
-		UserDetails user = User.builder().passwordEncoder(passwordEncoder).username("admin").password("dummy")
-				.roles("USER", "ADMIN").build();
+		UserDetails user = createUserDetails(passwordEncoder, "admin", "dummy");
+		UserDetails user2 = createUserDetails(passwordEncoder, "daman", "dummy");
 
-		return new InMemoryUserDetailsManager(user);
+		return new InMemoryUserDetailsManager(user, user2);
+	}
+
+	private UserDetails createUserDetails(Function<String, String> passwordEncoder, String username, String password) {
+		UserDetails user = User.builder().passwordEncoder(passwordEncoder).username(username).password(password)
+				.roles("USER", "ADMIN").build();
+		return user;
 	}
 
 	@Bean

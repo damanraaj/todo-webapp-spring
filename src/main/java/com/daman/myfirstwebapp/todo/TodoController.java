@@ -52,16 +52,29 @@ public class TodoController {
 
 	@GetMapping("delete-todo")
 	public String handleDeleteTodo(ModelMap map, @RequestParam long id) {
-		todoService.deleteTodoById(id);
+		Todo todo = todoService.findById(id);
+		String loggedInUser = getLoggedInUser(map);
+		if (todo.getUsername().equals(loggedInUser)) {
+			todoService.deleteTodoById(loggedInUser, id);
+		} else {
+			logger.debug("Invalid - User {} tried to delete todo {}", loggedInUser, id);
+		}
 		return "redirect:/list-todos";
 	}
 
 	@GetMapping("update-todo")
 	public String goToUpdateTodoPage(ModelMap map, @RequestParam long id) {
 		Todo todo = todoService.findById(id);
-		logger.debug("Open update todo page for {}", todo.toString());
-		map.put("todo", todo);
-		return "updateTodo";
+		String loggedInUser = getLoggedInUser(map);
+
+		if (todo.getUsername().equals(loggedInUser)) {
+			logger.debug("User {} opened update page for {}", loggedInUser, todo.toString());
+			map.put("todo", todo);
+			return "updateTodo";
+		} else {
+			logger.info("Invalid - user {} tried to update todo {}", loggedInUser, id);
+			return "redirect:/list-todos";
+		}
 	}
 
 	@PostMapping("update-todo")
@@ -71,12 +84,13 @@ public class TodoController {
 		}
 		todo.setUsername(getLoggedInUser(map));
 		todoService.updateTodo(todo);
-		logger.debug("Updated todo {}", todo.toString());
 		return "redirect:/list-todos";
 	}
 
 	private String getLoggedInUser(ModelMap map) {
 		SecurityContext context = SecurityContextHolder.getContext();
-		return context.getAuthentication().getName();
+		String userName = context.getAuthentication().getName();
+		map.addAttribute("name", userName);
+		return userName;
 	}
 }
