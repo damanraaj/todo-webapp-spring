@@ -1,13 +1,13 @@
-package com.daman.myfirstwebapp;
+package com.daman.todowebapp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MyfirstwebappApplicationTests {
+class TodowebappApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }
