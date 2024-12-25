@@ -1,13 +1,13 @@
-package com.daman.todowebapp;
+package com.daman.myfirstwebapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TodoWebappApplication {
+public class MyfirstwebappApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TodoWebappApplication.class, args);
+		SpringApplication.run(MyfirstwebappApplication.class, args);
 	}
 
 }
