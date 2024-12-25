@@ -1,6 +1,7 @@
 package com.daman.myfirstwebapp.todo;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,13 +24,13 @@ public class TodoController {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private TodoService todoService;
+	private TodoRepository todoRepository;
 
 	@GetMapping("list-todos")
 	public String getTodoList(ModelMap map) {
 		String loggedInUser = getLoggedInUser(map);
 		logger.debug("User {} opened list todos", loggedInUser);
-		map.put("todo", todoService.findByUserName(loggedInUser));
+		map.put("todo", todoRepository.findByUsername(loggedInUser));
 		return "listTodos";
 	}
 
@@ -46,16 +47,22 @@ public class TodoController {
 			return "addTodo";
 		}
 
-		todoService.addTodo(getLoggedInUser(map), todo.getDescription(), todo.getTargetDate());
+		todo.setUsername(getLoggedInUser(map));
+		todoRepository.save(todo);
 		return "redirect:/list-todos";
 	}
 
 	@GetMapping("delete-todo")
-	public String handleDeleteTodo(ModelMap map, @RequestParam long id) {
-		Todo todo = todoService.findById(id);
+	public String handleDeleteTodo(ModelMap map, @RequestParam int id) {
+		Optional<Todo> todoById = todoRepository.findById(id);
+		if (!todoById.isPresent()) {
+			return "redirect:/list-todos";
+		}
+		Todo todo = todoById.get();
 		String loggedInUser = getLoggedInUser(map);
 		if (todo.getUsername().equals(loggedInUser)) {
-			todoService.deleteTodoById(loggedInUser, id);
+			todoRepository.deleteById(id);
+			logger.debug("User {} deleted todo {}", loggedInUser, todo.toString());
 		} else {
 			logger.debug("Invalid - User {} tried to delete todo {}", loggedInUser, id);
 		}
@@ -63,8 +70,12 @@ public class TodoController {
 	}
 
 	@GetMapping("update-todo")
-	public String goToUpdateTodoPage(ModelMap map, @RequestParam long id) {
-		Todo todo = todoService.findById(id);
+	public String goToUpdateTodoPage(ModelMap map, @RequestParam int id) {
+		Optional<Todo> todoById = todoRepository.findById(id);
+		if (!todoById.isPresent()) {
+			return "redirect:/list-todos";
+		}
+		Todo todo = todoById.get();
 		String loggedInUser = getLoggedInUser(map);
 
 		if (todo.getUsername().equals(loggedInUser)) {
@@ -82,8 +93,15 @@ public class TodoController {
 		if (result.hasErrors()) {
 			return "updateTodo";
 		}
-		todo.setUsername(getLoggedInUser(map));
-		todoService.updateTodo(todo);
+		Optional<Todo> todoById = todoRepository.findById(todo.getId());
+		if (!todoById.isPresent()) {
+			logger.debug("Invalid - todo {} is deleted", todo.getId());
+		} else if (!todoById.get().getUsername().equals(getLoggedInUser(map))) {
+			logger.debug("Invalid - user {} tried to update todo {}", getLoggedInUser(map), todo.getId());
+		} else {
+			todo.setUsername(getLoggedInUser(map));
+			todoRepository.save(todo);
+		}
 		return "redirect:/list-todos";
 	}
 
